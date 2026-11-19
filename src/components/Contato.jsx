@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { mostrarAlerta } from '../utils/alerta';
 import { colors, spacing, radius, shadow } from '../theme/theme';
 
 export default function Contato() {
@@ -9,10 +10,10 @@ export default function Contato() {
 
   const enviar = () => {
     if (!nome.trim() || !contato.trim() || !mensagem.trim()) {
-      Alert.alert('Campos obrigatórios', 'Preencha nome, e-mail/WhatsApp e mensagem.');
+      mostrarAlerta('Campos obrigatórios', 'Preencha nome, e-mail/WhatsApp e mensagem.');
       return;
     }
-    Alert.alert('Mensagem enviada!', `Obrigado, ${nome.trim()}! Recebemos sua mensagem e responderemos em breve.`);
+    mostrarAlerta('Mensagem enviada!', `Obrigado, ${nome.trim()}! Recebemos sua mensagem e responderemos em breve.`);
     setNome('');
     setContato('');
     setMensagem('');

@@ -1,19 +1,20 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, Linking, Alert, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Linking, StyleSheet } from 'react-native';
+import { mostrarAlerta } from '../utils/alerta';
 import { colors, spacing, radius, shadow } from '../theme/theme';
 
 export default function EntregaFlutuante({ telefone, link }) {
-  const ligar = async () => {
+  const abrirWhatsApp = async () => {
     try {
       await Linking.openURL(link);
     } catch (e) {
-      Alert.alert('Não foi possível ligar', `Ligue manualmente para ${telefone}.`);
+      mostrarAlerta('Não foi possível abrir o WhatsApp', `Chame manualmente no número ${telefone}.`);
     }
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={ligar} activeOpacity={0.85}
-      accessibilityRole="button" accessibilityLabel={`Ligar para ${telefone}`}>
+    <TouchableOpacity style={styles.container} onPress={abrirWhatsApp} activeOpacity={0.85}
+      accessibilityRole="button" accessibilityLabel={`Pedir pelo WhatsApp: ${telefone}`}>
       <View style={styles.pilula}>
         <Text style={styles.numero}>{telefone}</Text>
         <Text style={styles.subtitulo}>Entregamos na sua casa!</Text>

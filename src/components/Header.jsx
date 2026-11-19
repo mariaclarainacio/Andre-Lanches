@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, Image, TouchableOpacity, Animated, Platform, StyleSheet } from 'react-native';
 import { colors, spacing, radius, shadow } from '../theme/theme';
 
 const ABAS = [
@@ -8,12 +8,37 @@ const ABAS = [
   { chave: 'contato', rotulo: 'Contato' },
 ];
 
-export default function Header({ telaAtiva, onNavegar }) {
+export default function Header({ telaAtiva, onNavegar, qtdCarrinho = 0 }) {
+  // O selo do carrinho "pulsa" sempre que a quantidade muda.
+  const escala = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    if (qtdCarrinho === 0) return;
+    const nativo = Platform.OS !== 'web';
+    Animated.sequence([
+      Animated.timing(escala, { toValue: 1.5, duration: 120, useNativeDriver: nativo }),
+      Animated.timing(escala, { toValue: 1, duration: 120, useNativeDriver: nativo }),
+    ]).start();
+  }, [qtdCarrinho, escala]);
+
   return (
     <View style={styles.container}>
       <View style={styles.logoRow}>
         <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
         <Text style={styles.titulo}>André Lanches</Text>
+
+        <TouchableOpacity style={styles.icone} onPress={() => onNavegar('pedidos')}
+          accessibilityLabel="Meus pedidos" activeOpacity={0.7}>
+          <Text style={styles.iconeTexto}>🧾</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.icone} onPress={() => onNavegar('carrinho')}
+          accessibilityLabel="Carrinho" activeOpacity={0.7}>
+          <Text style={styles.iconeTexto}>🛒</Text>
+          {qtdCarrinho > 0 && (
+            <Animated.View style={[styles.badge, { transform: [{ scale: escala }] }]}>
+              <Text style={styles.badgeTexto}>{qtdCarrinho}</Text>
+            </Animated.View>
+          )}
+        </TouchableOpacity>
       </View>
 
       <View style={styles.menu}>
@@ -49,7 +74,17 @@ const styles = StyleSheet.create({
   },
   logoRow: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md },
   logo: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.white },
-  titulo: { color: colors.white, fontSize: 24, fontWeight: '800', marginLeft: spacing.sm },
+  titulo: { flex: 1, color: colors.white, fontSize: 22, fontWeight: '800', marginLeft: spacing.sm },
+  icone: {
+    width: 40, height: 40, borderRadius: 20, marginLeft: spacing.sm,
+    backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center',
+  },
+  iconeTexto: { fontSize: 18 },
+  badge: {
+    position: 'absolute', top: -4, right: -4, minWidth: 20, height: 20, borderRadius: 10,
+    backgroundColor: colors.yellow, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 4,
+  },
+  badgeTexto: { color: colors.red, fontSize: 12, fontWeight: '900' },
   menu: { flexDirection: 'row', justifyContent: 'space-between' },
   aba: {
     flex: 1,
