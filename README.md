@@ -101,6 +101,9 @@ npx eas-cli update --branch main --message "Primeira versão"
 O comando gera o link e o QR Code para abrir o app no Expo Go.
 
 ## Autores
-
-GitHub: https://github.com/mariaclarainacio/Andre-Lanches
-GitHub: https://github.com/TheuznX
+Maria Clara Inacio
+• GitHub: https://github.com/mariaclarainacio/Andre-Lanches
+Matheus Augusto
+• GitHub: https://github.com/TheuznX
+Ana Beatriz Vieira Alves
+• GitHub: https://github.com/abavieira
